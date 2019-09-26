@@ -426,11 +426,23 @@ INSERT INTO `columns` (`id`, `table_id`, `column_type_id`, `column_name`, `descr
 	(989, 53, NULL, 'updated_by', 'UPDATED BY', 0, '2019-09-05 17:41:49', '2019-09-05 17:41:49', NULL, NULL);
 /*!40000 ALTER TABLE `columns` ENABLE KEYS */;
 
--- Volcando datos para la tabla banana.counter_series: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla banana.column_type: ~4 rows (aproximadamente)
+/*!40000 ALTER TABLE `column_type` DISABLE KEYS */;
+INSERT INTO `column_type` (`id`, `name`) VALUES
+	(1, 'String'),
+	(2, 'Number'),
+	(3, 'Date'),
+	(5, 'Boolean');
+/*!40000 ALTER TABLE `column_type` ENABLE KEYS */;
+
+-- Volcando datos para la tabla banana.counter_series: ~5 rows (aproximadamente)
 /*!40000 ALTER TABLE `counter_series` DISABLE KEYS */;
-INSERT INTO `counter_series` (`id`, `type_document_id`, `serie`, `counter`, `organization_id`, `user_id`, `created_by`, `updated_by`, `is_default_serie`) VALUES
-	(1, NULL, '00', 34, NULL, 1, 1, 1, 1),
-	(9, 1, '01', 3, 54, 1, 1, 1, 0);
+INSERT INTO `counter_series` (`id`, `type_document_id`, `serie`, `counter`, `name`, `organization_id`, `user_id`, `created_by`, `updated_by`, `is_default_serie`) VALUES
+	(1, NULL, '00', 64, '0', NULL, 1, 1, 1, 1),
+	(2, NULL, '00', 4, 'OVERCOM', 54, 62, 1, 1, 0),
+	(17, NULL, '01', 0, 'OVERCOM VALENCIA', NULL, NULL, NULL, NULL, 0),
+	(18, NULL, '011', 0, 'OVERCOM VALENCIA TIENDA 1', NULL, NULL, NULL, NULL, 0),
+	(19, 1, '0111', 0, 'OVER VALENCIA TIENDA 1 - CAJA 1', NULL, NULL, NULL, NULL, 0);
 /*!40000 ALTER TABLE `counter_series` ENABLE KEYS */;
 
 -- Volcando datos para la tabla banana.databases: ~2 rows (aproximadamente)
@@ -824,7 +836,7 @@ INSERT INTO `language_currencies` (`id`, `language_id`, `tag`, `description`, `p
 	(18, 2, 'todos', 'all', 17, '1551122801');
 /*!40000 ALTER TABLE `language_currencies` ENABLE KEYS */;
 
--- Volcando datos para la tabla banana.language_documents: ~38 rows (aproximadamente)
+-- Volcando datos para la tabla banana.language_documents: ~84 rows (aproximadamente)
 /*!40000 ALTER TABLE `language_documents` DISABLE KEYS */;
 INSERT INTO `language_documents` (`id`, `language_id`, `tag`, `description`, `parent_tag`, `code`) VALUES
 	(1, 1, 'nombre_estatus', 'estatus', 1, '1564150841'),
@@ -859,12 +871,58 @@ INSERT INTO `language_documents` (`id`, `language_id`, `tag`, `description`, `pa
 	(32, 2, 'tercero', 'third', 31, '1565293332'),
 	(33, 1, 'serie', 'serie', 33, '1565293341'),
 	(34, 2, 'serie', 'serie', 33, '1565293341'),
-	(35, 1, 'lista_precios', 'lista de precio', 35, '1565293384'),
-	(36, 2, 'lista_precios', 'price list', 35, '1565293384'),
+	(35, 1, 'lista_precios', 'lista de precios', 35, '1565293384'),
+	(36, 2, 'lista_precios', 'prices list', 35, '1565293384'),
 	(37, 1, 'nombre_precio', 'nombre del precio', 37, '1565293416'),
 	(38, 2, 'nombre_precio', 'price name', 37, '1565293416'),
 	(39, 1, 'nombre_descuento', 'nombre del descuento', 39, '1566237123'),
-	(40, 2, 'nombre_descuento', 'discount name', 39, '1566237123');
+	(40, 2, 'nombre_descuento', 'discount name', 39, '1566237123'),
+	(41, 1, 'precio', 'precio', 41, '1568219755'),
+	(42, 2, 'precio', 'price', 41, '1568219755'),
+	(43, 1, 'stock', 'stock', 43, '1568219766'),
+	(44, 2, 'stock', 'stock', 43, '1568219766'),
+	(45, 1, 'productos_almacen', 'productos del almacen', 45, '1568219817'),
+	(46, 2, 'productos_almacen', 'warehouse products', 45, '1568219817'),
+	(47, 1, 'nombre_documento', 'nombre del documento', 47, '1568314897'),
+	(48, 2, 'nombre_documento', 'name of document', 47, '1568314897'),
+	(49, 1, 'tercero_id', 'id del tercero', 49, '1568314924'),
+	(50, 2, 'tercero_id', 'id of third', 49, '1568314924'),
+	(51, 1, 'nombre_tercero', 'nombre del tercero', 51, '1568314971'),
+	(52, 2, 'nombre_tercero', 'name of third', 51, '1568314971'),
+	(53, 1, 'referencia_tercero', 'referencia del tercero', 53, '1568315029'),
+	(54, 2, 'referencia_tercero', 'reference of third', 53, '1568315029'),
+	(55, 1, 'direccion', 'direccion', 55, '1568315087'),
+	(56, 2, 'direccion', 'address', 55, '1568315087'),
+	(57, 1, 'cif', 'cif', 57, '1568315166'),
+	(58, 2, 'cif', 'cif', 57, '1568315166'),
+	(59, 1, 'neto_total', 'total', 59, '1568315216'),
+	(60, 2, 'neto_total', 'total', 59, '1568315216'),
+	(61, 1, 'valido_desde', 'valido desde', 61, '1568315251'),
+	(62, 2, 'valido_desde', 'valid from', 61, '1568315251'),
+	(63, 1, 'valido_hasta', 'valido hasta', 63, '1568315335'),
+	(64, 2, 'valido_hasta', 'valid until', 63, '1568315335'),
+	(65, 1, 'envio', 'envio', 65, '1568653895'),
+	(66, 2, 'envio', 'shipping', 65, '1568653895'),
+	(67, 1, 'facturar', 'facturar', 67, '1568653915'),
+	(68, 2, 'facturar', 'bill', 67, '1568653915'),
+	(69, 1, 'pago', 'pago', 69, '1568653943'),
+	(70, 2, 'pago', 'paymet', 69, '1568653943'),
+	(71, 1, 'remitente', 'remitente', 71, '1568653962'),
+	(72, 2, 'remitente', 'sender', 71, '1568653962'),
+	(73, 1, 'principal', 'principal', 73, '1568654017'),
+	(74, 2, 'principal', 'principal', 73, '1568654017'),
+	(75, 1, 'si', 'si', 75, '1569427348'),
+	(76, 2, 'si', 'yes', 75, '1569427348'),
+	(77, 1, 'no', 'no', 77, '1569427359'),
+	(78, 2, 'no', 'not', 77, '1569427359'),
+	(79, 1, 'mostrar_series', 'mostrar series', 79, '1569427393'),
+	(80, 2, 'mostrar_series', 'show series', 79, '1569427393'),
+	(81, 1, 'mostrar_vendedor', 'mostrar vendedor', 81, '1569427451'),
+	(82, 2, 'mostrar_vendedor', 'show vendor', 81, '1569427451'),
+	(83, 1, 'mostrar_almacen', 'mostrar almacen', 83, '1569427678'),
+	(84, 2, 'mostrar_almacen', 'show warehouse', 83, '1569427678'),
+	(85, 1, 'editar_neto_row', 'editar precio neto por renglon', 85, '1569428030'),
+	(86, 2, 'editar_neto_row', 'edit net price per line', 85, '1569428030');
 /*!40000 ALTER TABLE `language_documents` ENABLE KEYS */;
 
 -- Volcando datos para la tabla banana.language_footer_documents: ~36 rows (aproximadamente)
@@ -908,7 +966,7 @@ INSERT INTO `language_footer_documents` (`id`, `language_id`, `tag`, `descriptio
 	(36, 2, 'resto_bruto', 'remainder', 35, '1565367098');
 /*!40000 ALTER TABLE `language_footer_documents` ENABLE KEYS */;
 
--- Volcando datos para la tabla banana.language_global: ~137 rows (aproximadamente)
+-- Volcando datos para la tabla banana.language_global: ~141 rows (aproximadamente)
 /*!40000 ALTER TABLE `language_global` DISABLE KEYS */;
 INSERT INTO `language_global` (`id`, `language_id`, `tag`, `description`, `parent_tag`, `code`) VALUES
 	(1, 1, 'nuevo', 'nuevo', 1, '1542745725'),
@@ -1047,14 +1105,18 @@ INSERT INTO `language_global` (`id`, `language_id`, `tag`, `description`, `paren
 	(148, 1, 'detalle_producto', 'detalles de producto', 148, '1567018555'),
 	(149, 2, 'detalle_producto', 'product details', 148, '1567018555'),
 	(150, 1, 'stock', 'stock', 150, '1567018590'),
-	(151, 2, 'stock', 'stock', 150, '1567018590');
+	(151, 2, 'stock', 'stock', 150, '1567018590'),
+	(152, 1, 'siguiente', 'siguiente', 152, '1568232758'),
+	(153, 2, 'siguiente', 'next', 152, '1568232758'),
+	(154, 1, 'anterior', 'anterior', 154, '1568232813'),
+	(155, 2, 'anterior', 'back', 154, '1568232813');
 /*!40000 ALTER TABLE `language_global` ENABLE KEYS */;
 
 -- Volcando datos para la tabla banana.language_hashes: ~22 rows (aproximadamente)
 /*!40000 ALTER TABLE `language_hashes` DISABLE KEYS */;
 INSERT INTO `language_hashes` (`id`, `table_id`, `hash`) VALUES
 	(1, 14, '$2y$10$PhRh1inOM5//8/QmZjqVOe.ufI9vwp.skftftcnJmdDENw3RR/vEu'),
-	(2, 0, '$2y$10$uMXzUh0Bx7kCNe/rS5YgKOJmOBiLq.JG9gsNnZwDnVb6OdgQl7wQe'),
+	(2, 0, '$2y$10$c37P7PPP/Q7jjFWxA8dTmuHE3.Jnxs.L65rJwnUupco4zfXxLP/fO'),
 	(3, 26, '$2y$10$IOCM.eglKfA5byMegscUXeRcYgDOsqETVhaRfDvIZiVNWLn4DP6Om'),
 	(4, 17, '$2y$10$k2ILefDx0p7VEQ4H87LMhOstiYfZE0W54g1kfXSLd2hfq2qnadera'),
 	(5, 18, '$2y$10$rfoQczZ6sJ5/pqG13gtt8OOIh3aG71glzWZR/YHVZsDLS5iCsa8Om'),
@@ -1069,15 +1131,15 @@ INSERT INTO `language_hashes` (`id`, `table_id`, `hash`) VALUES
 	(14, 36, '$2y$10$48USL9xDTgpARs5rz9ASoezlhHMoV4MvWWGM.0JCrGZDilkAp6VM6'),
 	(15, 39, '$2y$10$U1UBPuJAxR6u/9L7hwp6UOhM4lPKMrt.tf1IKjkJwAw.OfvSU0Hh2'),
 	(16, 40, '$2y$10$lrIFKYkGGiO2z8iWjxlr.eXP87ZfcoPJMrtRBdLHTaH1rzlUfElDS'),
-	(17, 47, '$2y$10$hszGeKnQ5NhxW3whT9BIleHfWo35uPfvJzFlFvW4990fuhqdEnmfO'),
-	(18, 49, '$2y$10$hPOxmltKpADqJtqC0h/cqutkDCFxgLZmagy7y5XdDMoW/Y3bjShh6'),
+	(17, 47, '$2y$10$fkd1dJ/xrYUDvMYksDmfkOSO/Sq.d8bh1F.D4qGbRlTA5mnInlq9u'),
+	(18, 49, '$2y$10$p9bRBHhdj1ArbZC1idLAsO5fqP5PuQMeml5g9IfSX3qPoaJdMRkEO'),
 	(19, 50, '$2y$10$Dj8Yt4OjE8zQPYsyKdAtUeR3hxNjD9M7Kif1lYn6rnYtnIGoapp2C'),
 	(20, 35, '$2y$10$jQc90MYqkhT07B4aipG.i.f3wGAYolUY/wpJ5up4Ajzwx47EhLWfq'),
 	(21, 51, '$2y$10$2u4tPRVL5QDxL8R5YMWAR.eteZOHFD0hgUTDpRAyzDY7lRuAzK0v2'),
 	(22, 53, '$2y$10$BBiJtCfx61CeW7m8ViQXXeEJDNZretvvG8cEfcFUcE1YbqeV/RWDi');
 /*!40000 ALTER TABLE `language_hashes` ENABLE KEYS */;
 
--- Volcando datos para la tabla banana.language_header_projects: ~24 rows (aproximadamente)
+-- Volcando datos para la tabla banana.language_header_projects: ~30 rows (aproximadamente)
 /*!40000 ALTER TABLE `language_header_projects` DISABLE KEYS */;
 INSERT INTO `language_header_projects` (`id`, `language_id`, `tag`, `description`, `parent_tag`, `code`) VALUES
 	(1, 1, 'organizacion', 'organizacion', 1, '1564424157'),
@@ -1103,7 +1165,13 @@ INSERT INTO `language_header_projects` (`id`, `language_id`, `tag`, `description
 	(21, 1, 'si', 'si', 21, '1565627269'),
 	(22, 2, 'si', 'yes', 21, '1565627269'),
 	(23, 1, 'no', 'no', 23, '1565627289'),
-	(24, 2, 'no', 'not', 23, '1565627289');
+	(24, 2, 'no', 'not', 23, '1565627289'),
+	(25, 1, 'id', 'id', 25, '1568232802'),
+	(26, 2, 'id', 'id', 25, '1568232802'),
+	(27, 1, 'cif', 'cif', 27, '1568232820'),
+	(28, 2, 'cif', 'cif', 27, '1568232820'),
+	(29, 1, 'referencia', 'referencia', 29, '1568307846'),
+	(30, 2, 'referencia', 'reference', 29, '1568307846');
 /*!40000 ALTER TABLE `language_header_projects` ENABLE KEYS */;
 
 -- Volcando datos para la tabla banana.language_imports: ~0 rows (aproximadamente)
@@ -1641,6 +1709,12 @@ INSERT INTO `module_table` (`module_id`, `table_id`) VALUES
 	(2, 53);
 /*!40000 ALTER TABLE `module_table` ENABLE KEYS */;
 
+-- Volcando datos para la tabla banana.status: ~0 rows (aproximadamente)
+/*!40000 ALTER TABLE `status` DISABLE KEYS */;
+INSERT INTO `status` (`id`, `name`, `description`, `created_by`, `updated_by`) VALUES
+	(1, 'PENDIENTE', 'PENDIENTE', 1, NULL);
+/*!40000 ALTER TABLE `status` ENABLE KEYS */;
+
 -- Volcando datos para la tabla banana.tables: ~42 rows (aproximadamente)
 /*!40000 ALTER TABLE `tables` DISABLE KEYS */;
 INSERT INTO `tables` (`id`, `table_name`, `description`, `created_at`, `updated_at`, `tag`, `angular_icon`, `is_menuitem`, `is_available`, `created_by`, `updated_by`) VALUES
@@ -1694,10 +1768,11 @@ INSERT INTO `tables` (`id`, `table_name`, `description`, `created_at`, `updated_
 	(53, 'setup_sales', 'SETUP SALES', '2019-09-05 17:40:53', '2019-09-05 17:40:53', 'configuracion', 'fa fa-users-cog', 1, 1, NULL, NULL);
 /*!40000 ALTER TABLE `tables` ENABLE KEYS */;
 
--- Volcando datos para la tabla banana.type_documents: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla banana.type_documents: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `type_documents` DISABLE KEYS */;
 INSERT INTO `type_documents` (`id`, `name`, `created_by`, `updated_by`) VALUES
-	(1, 'COTIZACION', 1, NULL);
+	(1, 'COTIZACION', 1, NULL),
+	(2, 'PEDIDO', NULL, NULL);
 /*!40000 ALTER TABLE `type_documents` ENABLE KEYS */;
 
 -- Volcando datos para la tabla banana.warehouses: ~5 rows (aproximadamente)

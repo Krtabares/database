@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `body_documents` (
   `dimensions` varchar(50) DEFAULT '0' COMMENT 'Calculo de la dimension del producto, resultado es equivalente a la unidad',
   `quantity` int(11) NOT NULL DEFAULT '0',
   `discount` varchar(50) DEFAULT '0',
-  `discount_cal` decimal(20,8) DEFAULT NULL,
+  `discount_cal` decimal(20,8) NOT NULL DEFAULT '0.00000000',
   `net_price` decimal(20,8) NOT NULL DEFAULT '0.00000000',
   `tax_id` int(11) DEFAULT NULL,
   `sale_rep_id` int(11) DEFAULT NULL,
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `body_documents` (
   CONSTRAINT `FK_body_documents_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_body_documents_users_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_body_documents_warehouses` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouses` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8 COMMENT='Reglones de los documentos';
+) ENGINE=InnoDB AUTO_INCREMENT=157 DEFAULT CHARSET=utf8 COMMENT='Reglones de los documentos';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -211,7 +211,7 @@ CREATE TABLE IF NOT EXISTS `bpartners` (
   CONSTRAINT `FK_bpartners_users_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`),
   CONSTRAINT `foreign_language_id` FOREIGN KEY (`language_id`) REFERENCES `languages` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `foreign_sales_rep_id` FOREIGN KEY (`sales_rep_id`) REFERENCES `bpartners` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1660 DEFAULT CHARSET=utf8 COMMENT='Business Partners (socio comercial) La tabla Business Partner le permite definir a cualquier parte con quien realice transacciones. Esto incluye clientes, vendedores y empleados. ';
+) ENGINE=InnoDB AUTO_INCREMENT=1661 DEFAULT CHARSET=utf8 COMMENT='Business Partners (socio comercial) La tabla Business Partner le permite definir a cualquier parte con quien realice transacciones. Esto incluye clientes, vendedores y empleados. ';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -237,10 +237,10 @@ CREATE TABLE IF NOT EXISTS `bpartner_locations` (
   `location_id` int(10) NOT NULL,
   `name` varchar(60) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL COMMENT 'The name of an entity (record) is used as an default search option in addition to the search key. The name is up to 60 characters in length.',
   `archived` tinyint(4) DEFAULT '0' COMMENT 'There are two methods of making records unavailable in the system: One is to delete the record, the other is to de-activate the record. A de-activated record is not available for selection, but available for reports.\nThere are two reasons for de-activating and not deleting records: (1) The system requires the record for audit purposes. (2) The record is referenced by other records. E.g., you cannot delete a Business Partner, if there are invoices for this partner record existing. You de-activate the Business Partner and prevent that this record is used for future entries.\nYes-No',
-  `is_ship_to` tinyint(4) DEFAULT '0' COMMENT 'If the Ship address is selected, the location is used to ship goods to a customer or receive goods from a vendor.',
-  `is_bill_to` tinyint(4) DEFAULT '0' COMMENT 'If the Invoice address is selected, the location is used to send invoices to a customer or receive invoices from a vendor.',
-  `is_pay_from` tinyint(4) DEFAULT '0' COMMENT 'If the Pay-From address is selected, this location is the address the Business Partner pays from and where dunning letters will be sent to.',
-  `is_remit_to` tinyint(4) DEFAULT NULL COMMENT 'If the Remit-To address is selected, the location is used to send payments to the vendor.',
+  `is_ship_to` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'If the Ship address is selected, the location is used to ship goods to a customer or receive goods from a vendor.',
+  `is_bill_to` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'If the Invoice address is selected, the location is used to send invoices to a customer or receive invoices from a vendor.',
+  `is_pay_from` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'If the Pay-From address is selected, this location is the address the Business Partner pays from and where dunning letters will be sent to.',
+  `is_remit_to` tinyint(4) NOT NULL COMMENT 'If the Remit-To address is selected, the location is used to send payments to the vendor.',
   `phone` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'The phone field identifies a telephone number',
   `phone_2` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'The 2nd phone field identifies an alternate telephone number.',
   `fax` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'The fax identifies a facsimile number for this Business Partner or Location',
@@ -310,7 +310,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   CONSTRAINT `FK_categories_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_categories_users_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`),
   CONSTRAINT `categories_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8 COMMENT='Categorias para la agrupacion de productos';
+) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8 COMMENT='Categorias para la agrupacion de productos';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -441,7 +441,7 @@ CREATE TABLE IF NOT EXISTS `contacts` (
   CONSTRAINT `FK_contacts_charges` FOREIGN KEY (`charge`) REFERENCES `charges` (`id`),
   CONSTRAINT `FK_contacts_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_contacts_users_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=218 DEFAULT CHARSET=utf8 COMMENT='Maintain Contacts\nThe Contact Window allows you to maintain Contacts who are individuals you deal with. Contacts may also be internal or external users who can log into the system and have access to functionality via one or more roles. A contact can also be a business partner contact.';
+) ENGINE=InnoDB AUTO_INCREMENT=222 DEFAULT CHARSET=utf8 COMMENT='Maintain Contacts\nThe Contact Window allows you to maintain Contacts who are individuals you deal with. Contacts may also be internal or external users who can log into the system and have access to functionality via one or more roles. A contact can also be a business partner contact.';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -463,13 +463,14 @@ CREATE TABLE IF NOT EXISTS `counter_series` (
   `type_document_id` int(11) DEFAULT NULL COMMENT 'enlace al tipo de documento',
   `serie` varchar(25) NOT NULL COMMENT 'serie a la que pertenece el contado (cada serie tendra su propio contador)',
   `counter` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'último número de documento usado',
+  `name` varchar(50) DEFAULT NULL COMMENT 'descripcion o nombre de la serie',
   `organization_id` int(10) unsigned DEFAULT NULL COMMENT 'Organización a la que pertenece esa serie\\\\n',
   `user_id` int(10) unsigned DEFAULT NULL,
   `created_by` int(10) unsigned DEFAULT NULL,
   `updated_by` int(10) unsigned DEFAULT NULL,
   `is_default_serie` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `serie` (`serie`),
+  UNIQUE KEY `type_document_id_serie` (`type_document_id`,`serie`),
   KEY `fk_counter_series_type_documents1_idx` (`type_document_id`),
   KEY `fk_counter_series_organizations1_idx` (`organization_id`),
   KEY `FK_counter_series_users` (`created_by`),
@@ -480,7 +481,7 @@ CREATE TABLE IF NOT EXISTS `counter_series` (
   CONSTRAINT `FK_counter_series_users_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `fk_counter_series_organizations1` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_counter_series_type_documents1` FOREIGN KEY (`type_document_id`) REFERENCES `type_documents` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='Series y Contadores\nIndica los contadores para cada serie que se asignan a cada documento\na su vez cada serie es asignada a cada organización';
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='Series y Contadores\nIndica los contadores para cada serie que se asignan a cada documento\na su vez cada serie es asignada a cada organización';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -607,7 +608,7 @@ CREATE TABLE IF NOT EXISTS `discounts_footers_documents` (
   PRIMARY KEY (`id`),
   KEY `FK_discounts_footers_documents_footer_documents` (`footer_document_id`),
   CONSTRAINT `FK_discounts_footers_documents_footer_documents` FOREIGN KEY (`footer_document_id`) REFERENCES `footer_documents` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='Discuentos y cargos aplicados al pie del documento';
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8 COMMENT='Discuentos y cargos aplicados al pie del documento';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -627,6 +628,8 @@ CREATE TABLE IF NOT EXISTS `discount_type_document` (
 CREATE TABLE IF NOT EXISTS `documents` (
   `id` int(11) NOT NULL COMMENT 'El numero del id segun el valor del contador de la serie',
   `counter_serie_id` int(11) NOT NULL,
+  `type_document_id` int(11) NOT NULL,
+  `bpartner_id` int(11) NOT NULL,
   `reference` varchar(1000) NOT NULL COMMENT 'llave primaria del documento, segun nombre de la serie y el contador',
   `header_project_id` int(11) NOT NULL,
   `address` mediumtext,
@@ -653,13 +656,17 @@ CREATE TABLE IF NOT EXISTS `documents` (
   KEY `FK_documents_price_lists` (`price_list_id`),
   KEY `FK_documents_currencies` (`currency_client`),
   KEY `FK_documents_currencies_2` (`currency_document`),
+  KEY `FK_documents_type_documents` (`type_document_id`),
+  KEY `FK_documents_bpartners_2` (`bpartner_id`),
   CONSTRAINT `FK__counter_series` FOREIGN KEY (`counter_serie_id`) REFERENCES `counter_series` (`id`),
   CONSTRAINT `FK__header_projects` FOREIGN KEY (`header_project_id`) REFERENCES `header_projects` (`id`),
   CONSTRAINT `FK_documents_bpartners` FOREIGN KEY (`sale_represent_id`) REFERENCES `bpartners` (`id`),
+  CONSTRAINT `FK_documents_bpartners_2` FOREIGN KEY (`bpartner_id`) REFERENCES `bpartners` (`id`),
   CONSTRAINT `FK_documents_currencies` FOREIGN KEY (`currency_client`) REFERENCES `currencies` (`id`),
   CONSTRAINT `FK_documents_currencies_2` FOREIGN KEY (`currency_document`) REFERENCES `currencies` (`id`),
   CONSTRAINT `FK_documents_price_lists` FOREIGN KEY (`price_list_id`) REFERENCES `price_lists` (`id`),
   CONSTRAINT `FK_documents_status` FOREIGN KEY (`status_id`) REFERENCES `status` (`id`),
+  CONSTRAINT `FK_documents_type_documents` FOREIGN KEY (`type_document_id`) REFERENCES `type_documents` (`id`),
   CONSTRAINT `FK_documents_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_documents_users_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_documents_warehouses` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouses` (`id`)
@@ -724,7 +731,7 @@ CREATE TABLE IF NOT EXISTS `footer_documents` (
   CONSTRAINT `FK_footer_documents_documents` FOREIGN KEY (`reference_document`) REFERENCES `documents` (`reference`),
   CONSTRAINT `FK_footer_documents_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_footer_documents_users_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COMMENT='Pie de los documentos. Indica los totales de los documentos';
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8 COMMENT='Pie de los documentos. Indica los totales de los documentos';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -788,7 +795,7 @@ CREATE TABLE IF NOT EXISTS `header_projects` (
   CONSTRAINT `FK_header_projects_organizations` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
   CONSTRAINT `FK_header_projects_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_header_projects_users_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COMMENT='Maneja los documentos de los terceros como un proyecto';
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8 COMMENT='Maneja los documentos de los terceros como un proyecto';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -1142,7 +1149,7 @@ CREATE TABLE IF NOT EXISTS `language_documents` (
   UNIQUE KEY `code_UNIQUE` (`code`,`tag`,`language_id`),
   KEY `language_id` (`language_id`),
   CONSTRAINT `language_documents_ibfk_1` FOREIGN KEY (`language_id`) REFERENCES `languages` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -1174,7 +1181,7 @@ CREATE TABLE IF NOT EXISTS `language_global` (
   UNIQUE KEY `code_UNIQUE` (`code`,`tag`,`language_id`),
   KEY `language_id` (`language_id`),
   CONSTRAINT `language_global_ibfk_1` FOREIGN KEY (`language_id`) REFERENCES `languages` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=156 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -1202,7 +1209,7 @@ CREATE TABLE IF NOT EXISTS `language_header_projects` (
   UNIQUE KEY `code_UNIQUE` (`code`,`tag`,`language_id`),
   KEY `language_id` (`language_id`),
   CONSTRAINT `language_header_projects_ibfk_1` FOREIGN KEY (`language_id`) REFERENCES `languages` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -1651,7 +1658,7 @@ CREATE TABLE IF NOT EXISTS `manufacturers` (
   KEY `FK_manufacturers_users_2` (`updated_by`),
   CONSTRAINT `FK_manufacturers_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_manufacturers_users_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 COMMENT='Fabricantes de productos';
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8 COMMENT='Fabricantes de productos';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -1711,7 +1718,7 @@ CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
   `expires_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `oauth_access_tokens_user_id_index` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1407 DEFAULT CHARSET=utf8 COMMENT='Token de inicio de sesion del usuario';
+) ENGINE=InnoDB AUTO_INCREMENT=1598 DEFAULT CHARSET=utf8 COMMENT='Token de inicio de sesion del usuario';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -1830,6 +1837,49 @@ CREATE TABLE IF NOT EXISTS `payment_terms` (
 
 -- La exportación de datos fue deseleccionada.
 
+-- Volcando estructura para tabla banana.payroll_column_rules
+CREATE TABLE IF NOT EXISTS `payroll_column_rules` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `column_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `payroll_table_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `tag` varchar(50) NOT NULL DEFAULT '0',
+  `value` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_payroll_column_rules_payroll_tables` (`payroll_table_id`),
+  KEY `FK_payroll_column_rules_columns` (`column_id`),
+  CONSTRAINT `FK_payroll_column_rules_columns` FOREIGN KEY (`column_id`) REFERENCES `columns` (`id`),
+  CONSTRAINT `FK_payroll_column_rules_payroll_tables` FOREIGN KEY (`payroll_table_id`) REFERENCES `payroll_tables` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla banana.payroll_imports
+CREATE TABLE IF NOT EXISTS `payroll_imports` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `table_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_payroll_imports_tables` (`table_id`),
+  CONSTRAINT `FK_payroll_imports_tables` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- La exportación de datos fue deseleccionada.
+
+-- Volcando estructura para tabla banana.payroll_tables
+CREATE TABLE IF NOT EXISTS `payroll_tables` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `table_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `payroll_import_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `taxonomy_column_id` int(10) unsigned DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `FK_payroll_tables_tables` (`table_id`),
+  KEY `FK_payroll_tables_payroll_imports` (`payroll_import_id`),
+  CONSTRAINT `FK_payroll_tables_payroll_imports` FOREIGN KEY (`payroll_import_id`) REFERENCES `payroll_imports` (`id`),
+  CONSTRAINT `FK_payroll_tables_tables` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+-- La exportación de datos fue deseleccionada.
+
 -- Volcando estructura para tabla banana.permissions_rols
 CREATE TABLE IF NOT EXISTS `permissions_rols` (
   `rol_id` int(10) unsigned NOT NULL,
@@ -1901,7 +1951,7 @@ CREATE TABLE IF NOT EXISTS `prices` (
   CONSTRAINT `FK_prices_users_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`),
   CONSTRAINT `fk_price_lists_has_product_details_price_lists1` FOREIGN KEY (`price_list_id`) REFERENCES `price_lists` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_price_lists_has_product_details_product_details1` FOREIGN KEY (`product_detail_id`) REFERENCES `product_details` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3261 DEFAULT CHARSET=utf8 COMMENT='Precios de las listas de precios. Indicando el producto y descuento';
+) ENGINE=InnoDB AUTO_INCREMENT=3447 DEFAULT CHARSET=utf8 COMMENT='Precios de las listas de precios. Indicando el producto y descuento';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -1932,14 +1982,14 @@ CREATE TABLE IF NOT EXISTS `price_lists` (
   CONSTRAINT `FK_price_lists_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_price_lists_users_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`),
   CONSTRAINT `foreign_price_list_currencie_id` FOREIGN KEY (`currency_id`) REFERENCES `currencies` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8 COMMENT='Lista de precios indicando impuesto, moneda y vigencia';
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 COMMENT='Lista de precios indicando impuesto, moneda y vigencia';
 
 -- La exportación de datos fue deseleccionada.
 
 -- Volcando estructura para tabla banana.products
 CREATE TABLE IF NOT EXISTS `products` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `reference` varchar(50) DEFAULT NULL,
+  `reference` varchar(50) NOT NULL,
   `name` varchar(255) CHARACTER SET latin1 NOT NULL,
   `description` text CHARACTER SET latin1,
   `type` char(1) CHARACTER SET latin1 DEFAULT 'P' COMMENT 'P=STOCKABLE PRODUCT\nS=SERVICE\nC=CONSUMABLE',
@@ -1969,14 +2019,14 @@ CREATE TABLE IF NOT EXISTS `products` (
   CONSTRAINT `foreign_key_categories_categories_id` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `foreign_key_manufacturer_manufacture_id` FOREIGN KEY (`manufacture_id`) REFERENCES `manufacturers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `foreign_key_units_unit_id` FOREIGN KEY (`unit_id`) REFERENCES `units` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=371 DEFAULT CHARSET=utf8 COMMENT='Descripcion general del producto';
+) ENGINE=InnoDB AUTO_INCREMENT=1109 DEFAULT CHARSET=utf8 COMMENT='Descripcion general del producto';
 
 -- La exportación de datos fue deseleccionada.
 
 -- Volcando estructura para tabla banana.product_details
 CREATE TABLE IF NOT EXISTS `product_details` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `reference` varchar(50) DEFAULT NULL,
+  `reference` varchar(50) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `product_id` int(11) NOT NULL,
   `sku` varchar(45) DEFAULT NULL,
@@ -2004,7 +2054,7 @@ CREATE TABLE IF NOT EXISTS `product_details` (
   CONSTRAINT `FK_product_details_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
   CONSTRAINT `FK_product_details_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_product_details_users_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=368 DEFAULT CHARSET=utf8 COMMENT='Detalles del producto. Un producto tiene al menos un detalle\r\nEsta es la informacion especifica del producto y sus detalles';
+) ENGINE=InnoDB AUTO_INCREMENT=1107 DEFAULT CHARSET=utf8 COMMENT='Detalles del producto. Un producto tiene al menos un detalle\r\nEsta es la informacion especifica del producto y sus detalles';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -2144,7 +2194,7 @@ CREATE TABLE IF NOT EXISTS `setup_configurations` (
   CONSTRAINT `FK_setup_configurations_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_setup_configurations_users_2` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_setup_configurations_users_3` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='Configuracion general del modulo configurations';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='Configuracion general del modulo configurations';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -2165,7 +2215,7 @@ CREATE TABLE IF NOT EXISTS `setup_sales` (
   CONSTRAINT `FK_setup_sales_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_setup_sales_users_2` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_setup_sales_users_3` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='configuracion del modulo Sales';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='configuracion del modulo Sales';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -2189,7 +2239,7 @@ CREATE TABLE IF NOT EXISTS `states` (
   CONSTRAINT `FK_states_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_states_users_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`),
   CONSTRAINT `states_country_id_foreign` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8 COMMENT='Estados';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -2226,7 +2276,7 @@ CREATE TABLE IF NOT EXISTS `stocks` (
   KEY `fk_stocks_products1_idx` (`product_detail_id`),
   CONSTRAINT `fk_stocks_products1` FOREIGN KEY (`product_detail_id`) REFERENCES `product_details` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_stocks_warehouses1` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=135 DEFAULT CHARSET=utf8 COMMENT='Stock del producto en cada inventario';
+) ENGINE=InnoDB AUTO_INCREMENT=1115 DEFAULT CHARSET=utf8 COMMENT='Stock del producto en cada inventario';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -2336,16 +2386,19 @@ CREATE TABLE IF NOT EXISTS `type_documents` (
   KEY `FK_type_documents_users_2` (`updated_by`),
   CONSTRAINT `FK_type_documents_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_type_documents_users_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='Tipo de documentos\nGuarda información sobre los tipos de documentos\nej: pedidos venta , facturas venta, pedidos compra, notas de recepcion, etc';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='Tipo de documentos\nGuarda información sobre los tipos de documentos\nej: pedidos venta , facturas venta, pedidos compra, notas de recepcion, etc';
 
 -- La exportación de datos fue deseleccionada.
 
 -- Volcando estructura para tabla banana.type_document_settings
 CREATE TABLE IF NOT EXISTS `type_document_settings` (
   `type_document_id` int(10) NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
   `setting` json NOT NULL,
-  PRIMARY KEY (`type_document_id`),
-  CONSTRAINT `FK_type_document_settings_type_documents` FOREIGN KEY (`type_document_id`) REFERENCES `type_documents` (`id`)
+  PRIMARY KEY (`type_document_id`,`user_id`),
+  KEY `FK_type_document_settings_users` (`user_id`),
+  CONSTRAINT `FK_type_document_settings_type_documents` FOREIGN KEY (`type_document_id`) REFERENCES `type_documents` (`id`),
+  CONSTRAINT `FK_type_document_settings_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Configuracion del tipo de documento';
 
 -- La exportación de datos fue deseleccionada.
@@ -2442,7 +2495,7 @@ CREATE TABLE IF NOT EXISTS `zaudit` (
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`audit_id`),
   KEY `pk_index` (`table_name`,`pk1`,`pk2`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=21639 DEFAULT CHARSET=utf8 COMMENT='Tabla para la auditoria';
+) ENGINE=InnoDB AUTO_INCREMENT=30422 DEFAULT CHARSET=utf8 COMMENT='Tabla para la auditoria';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -2455,7 +2508,7 @@ CREATE TABLE IF NOT EXISTS `zaudit_meta` (
   `new_value` longtext,
   PRIMARY KEY (`audit_meta_id`),
   KEY `zaudit_meta_index` (`audit_id`,`col_name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=39624 DEFAULT CHARSET=utf8 COMMENT='Tabla para auditoria';
+) ENGINE=InnoDB AUTO_INCREMENT=43859 DEFAULT CHARSET=utf8 COMMENT='Tabla para auditoria';
 
 -- La exportación de datos fue deseleccionada.
 
@@ -5117,6 +5170,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`%` PROCEDURE `CR_InsertHeaderDocument`(
 	IN `bp_header_project_id` INT,
 	IN `bp_counter_serie_id` INT,
+	IN `bp_type_document_id` INT,
+	IN `bp_bpartner_id` INT,
 	IN `bp_address` VARCHAR(50),
 	IN `bp_valid_from` DATE,
 	IN `bp_valid_until` DATE,
@@ -5129,6 +5184,7 @@ CREATE DEFINER=`root`@`%` PROCEDURE `CR_InsertHeaderDocument`(
 	IN `bp_rate` DECIMAL(20,8),
 	IN `bp_status_id` INT,
 	IN `bp_user_id` INT
+
 
 
 
@@ -5156,6 +5212,8 @@ INSERT INTO `documents` (
  	 `id`,
     `header_project_id`,
     `counter_serie_id`,
+    `type_document_id`,
+    `bpartner_id`,
     `address`,
     `valid_from`,
     `valid_until`,
@@ -5173,6 +5231,8 @@ VALUES (
 	 `bp_id`,
     `bp_header_project_id`,
     `bv_counter_serie_id`,
+    `bp_type_document_id`,
+    `bp_bpartner_id`,
     `bp_address`,
     `bp_valid_from`,
     `bp_valid_until`,
@@ -6055,7 +6115,13 @@ DELIMITER ;
 
 -- Volcando estructura para procedimiento banana.CR_InsertToken
 DELIMITER //
-CREATE DEFINER=`root`@`%` PROCEDURE `CR_InsertToken`(IN bp_user_id INT, bp_name VARCHAR(191), bp_token VARCHAR(255), bp_revoked BOOLEAN)
+CREATE DEFINER=`root`@`%` PROCEDURE `CR_InsertToken`(
+	IN `bp_user_id` INT,
+	IN `bp_name` VARCHAR(191),
+	IN `bp_token` VARCHAR(255),
+	IN `bp_revoked` BOOLEAN
+)
+    COMMENT 'Abre una sesion en BD al usuario mediante su id,  nombre del cliente, token y si es revocado'
 BEGIN
 	DELETE FROM oauth_access_tokens WHERE user_id = bp_user_id and `name` = bp_name;
 	INSERT INTO oauth_access_tokens (user_id, name, token, revoked, created_at, updated_at, expires_at)
@@ -6068,10 +6134,12 @@ DELIMITER //
 CREATE DEFINER=`root`@`%` PROCEDURE `CR_InsertTypeDocumentSetting`(
 	IN `bp_type_document` INT,
 	IN `bp_setting` JSON
+,
+	IN `bp_user` INT
 )
 BEGIN	
-	INSERT INTO `type_document_settings` (`type_document_id`, `setting`)
-	VALUES (`bp_type_document`, `bp_setting`);
+	INSERT INTO `type_document_settings` (`type_document_id`, `setting`, `user_id`)
+	VALUES (`bp_type_document`, `bp_setting`, `bp_user`);
 END//
 DELIMITER ;
 
@@ -6532,10 +6600,12 @@ DELIMITER ;
 -- Volcando estructura para procedimiento banana.DL_DeleteBpartnerData
 DELIMITER //
 CREATE DEFINER=`root`@`%` PROCEDURE `DL_DeleteBpartnerData`(
-IN `bp_bpartner_id` INT, in `bp_user` int)
+	IN `bp_bpartner_id` INT,
+	IN `bp_user` int
+)
 BEGIN
 	
-	DELETE FROM bpartner_organization
+	DELETE FROM organization_bpartner
 		WHERE
 			bpartner_id = bp_bpartner_id;
 	
@@ -7188,7 +7258,10 @@ DELIMITER ;
 
 -- Volcando estructura para procedimiento banana.DL_LogOut
 DELIMITER //
-CREATE DEFINER=`root`@`%` PROCEDURE `DL_LogOut`(IN bp_id INT)
+CREATE DEFINER=`root`@`%` PROCEDURE `DL_LogOut`(
+	IN `bp_id` INT
+)
+    COMMENT 'revoca la sesion del usuario mediante su id'
 BEGIN
     UPDATE oauth_access_tokens  SET revoked = 1 WHERE user_id = bp_id;
 END//
@@ -8539,6 +8612,7 @@ DELIMITER ;
 DELIMITER //
 CREATE DEFINER=`root`@`%` PROCEDURE `UP_UpdateHeaderDocument`(
 	IN `bp_address` VARCHAR(50),
+	IN `bp_bpartner_id` INT,
 	IN `bp_valid_from` DATE,
 	IN `bp_valid_until` DATE,
 	IN `bp_warehouse_id` INT,
@@ -8551,11 +8625,13 @@ CREATE DEFINER=`root`@`%` PROCEDURE `UP_UpdateHeaderDocument`(
 	IN `bp_status_id` INT,
 	IN `bp_user_id` INT
 
+
 )
 BEGIN
 
     UPDATE `documents` SET
         `address` = `bp_address`,
+        `bpartner_id` = `bp_bpartner_id`,
         `valid_from` = `bp_valid_from`,
         `valid_until` = `bp_valid_until`,
         `warehouse_id` = `bp_warehouse_id`,
@@ -9354,6 +9430,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`%` PROCEDURE `UP_UpdateTypeDocumentSetting`(
 	IN `bp_type_document` INT,
 	IN `bp_setting` JSON
+,
+	IN `bp_user` INT
 )
 BEGIN
 	DECLARE exist BOOLEAN;
@@ -9361,18 +9439,19 @@ BEGIN
 	SET exist = (
         SELECT count(t_d_s.type_document_id) FROM `type_document_settings` t_d_s
         INNER JOIN `type_documents` t_d ON t_d.id = t_d_s.type_document_id
-        WHERE t_d_s.type_document_id = `bp_type_document`
+        INNER JOIN `users` u ON u.id = t_d_s.user_id
+        WHERE t_d.id = `bp_type_document` AND u.id = `bp_user`
 	);
 	
 	IF exist = TRUE THEN
 	
 		UPDATE `type_document_settings` SET
 		`setting` = `bp_setting`
-		WHERE `type_document_id` = `bp_type_document`;
+		WHERE `type_document_id` = `bp_type_document` AND user_id = `bp_user`;
 	
 	ELSE
 	
-		CALL CR_InsertTypeDocumentSetting(`bp_type_document`, `bp_setting`);
+		CALL CR_InsertTypeDocumentSetting(`bp_type_document`, `bp_setting`, `bp_user`);
 	
 	END IF;
 	
